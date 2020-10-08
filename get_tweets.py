@@ -21,11 +21,11 @@ def auth():
     return os.environ.get("TWITTER_AUTH_BEARER_TOKEN")
 
 
-def create_url(max_id=None):
+def create_url(user, max_id=None):
     if not max_id:
-        url = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=realDonaldTrump&count=200&include_rts=false"
+        url = f"https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name={user}&count=200&include_rts=false"
     else:
-        url = f"https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=realDonaldTrump&count=200&include_rts=false&max_id={max_id}"
+        url = f"https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name={user}&count=200&include_rts=false&max_id={max_id}"
 
     return url
 
@@ -45,48 +45,50 @@ def connect_to_endpoint(url, headers):
 
 def main():
     bearer_token = auth()
-    url = create_url()
     headers = create_headers(bearer_token)
-    json_response = connect_to_endpoint(url, headers)
-    min_id = float('inf')
-    all_tweets = []
-
-    for jsn in json_response:
-        text = jsn['text']
-        id = jsn['id']
-        text = process_tweet_text(text)
-
-        if text != '':
-            all_tweets.append(text)
-        min_id = min(min_id, id)
-
-    seen_ids = set()
-    seen_ids.add(min_id)
-
-    while len(all_tweets) < 3000:
-        url = create_url(min_id)
+    users = ["realDonaldTrump", "Alyssa_Milano", "elonmusk", "kanyewest"]
+    for user in users:
+        url = create_url(user)
         json_response = connect_to_endpoint(url, headers)
-
+        min_id = float('inf')
+        all_tweets = []
+        print(user)
         for jsn in json_response:
             text = jsn['text']
             id = jsn['id']
             text = process_tweet_text(text)
+
             if text != '':
                 all_tweets.append(text)
             min_id = min(min_id, id)
 
-        if min_id in seen_ids:
-            break
-        else:
-            seen_ids.add(min_id)
-        print(min_id)
-        print(len(all_tweets))
+        seen_ids = set()
+        seen_ids.add(min_id)
 
-    with open('dtrump_tweets.pkl', 'wb') as file:
-        pickle.dump(all_tweets, file)
+        while len(all_tweets) < 3000:
+            url = create_url(user, min_id)
+            json_response = connect_to_endpoint(url, headers)
 
-    with open('dtrump_lastid.pkl', 'wb') as file:
-        pickle.dump(min_id, file)
+            for jsn in json_response:
+                text = jsn['text']
+                id = jsn['id']
+                text = process_tweet_text(text)
+                if text != '':
+                    all_tweets.append(text)
+                min_id = min(min_id, id)
+
+            if min_id in seen_ids:
+                break
+            else:
+                seen_ids.add(min_id)
+            print(min_id)
+            print(len(all_tweets))
+
+        with open(f'{user}_tweets.pkl', 'wb') as file:
+            pickle.dump(all_tweets, file)
+
+        with open(f'{user}_lastid.pkl', 'wb') as file:
+            pickle.dump(min_id, file)
 
 
 
