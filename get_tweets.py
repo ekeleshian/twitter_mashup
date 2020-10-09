@@ -18,14 +18,14 @@ def process_tweet_text(text):
 
 
 def auth():
-    return os.environ.get("TWITTER_AUTH_BEARER_TOKEN")
+    return os.environ.get("SECOND_TWITTER_AUTH_BEARER_TOKEN")
 
 
 def create_url(user, max_id=None):
     if not max_id:
-        url = f"https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name={user}&count=200&include_rts=false"
+        url = f"https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name={user}&count=200&include_rts=false&exclude_replies=true"
     else:
-        url = f"https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name={user}&count=200&include_rts=false&max_id={max_id}"
+        url = f"https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name={user}&count=200&include_rts=false&max_id={max_id}&exclude_replies=true"
 
     return url
 
@@ -46,7 +46,7 @@ def connect_to_endpoint(url, headers):
 def main():
     bearer_token = auth()
     headers = create_headers(bearer_token)
-    users = ["realDonaldTrump", "Alyssa_Milano", "elonmusk", "kanyewest"]
+    users = ["realDonaldTrump", "elonmusk", "kanyewest", "Alyssa_Milano", "FINALLEVEL", "annakhachiyan"]
     for user in users:
         url = create_url(user)
         json_response = connect_to_endpoint(url, headers)
@@ -65,7 +65,7 @@ def main():
         seen_ids = set()
         seen_ids.add(min_id)
 
-        while len(all_tweets) < 3000:
+        while len(all_tweets) < 3200:
             url = create_url(user, min_id)
             json_response = connect_to_endpoint(url, headers)
 
@@ -83,12 +83,11 @@ def main():
                 seen_ids.add(min_id)
             print(min_id)
             print(len(all_tweets))
+        all_tweets = list(set(all_tweets))
 
-        with open(f'{user}_tweets.pkl', 'wb') as file:
+        with open(f'{user}_tweets_v2.pkl', 'wb') as file:
             pickle.dump(all_tweets, file)
 
-        with open(f'{user}_lastid.pkl', 'wb') as file:
-            pickle.dump(min_id, file)
 
 
 
