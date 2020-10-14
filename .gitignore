@@ -1,0 +1,7 @@
+tweetMashUp/
+*.pkl
+*.csv
+.idea/
+.ipynb_checkpoints/
+*.json
+*.hdf5
