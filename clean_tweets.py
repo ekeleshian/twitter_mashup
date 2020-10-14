@@ -670,41 +670,11 @@ def load_dataframe():
     return df
 
 
-def main(saved_df = True):
-    if not saved_df:
-        df = load_dataframe()
-        df = resample_dataframe(df)
-        df = expand_vocab_coverage(df)
-        df.to_csv("clean_tweets_rdt_kw_icet_am_ak.csv", index=False)
-    else:
-        df = pd.read_csv("clean_tweets_rdt_kw_icet_am_ak.csv")
-        tweets = list(df[df['user'] == "annakhachiyan"]['cleaner_tweet'])
-        labels = list(df[df['user'] == 'annakhachiyan']['user'])
-        tweets.extend(list(df[df['user'] == "Alyssa_Milano"]['cleaner_tweet']))
-        labels.extend(list(df[df['user'] == "Alyssa_Milano"]['user']))
-
-        df_part = pd.DataFrame({'label': labels, 'tweet': tweets})
-        df_part = df_part.sample(frac=1)
-        texts = list(df_part['tweet'])
-        context_labels = list(df_part['label'])
-        textgen = textgenrnn(name=f'annakhachiyan_Alyssa_Milano_twitter')
-
-        textgen.train_new_model(
-            texts,
-            context_labels=context_labels,
-            num_epochs=200,
-            gen_epochs=1,
-            batch_size=128,
-            train_size=1.0,
-            rnn_layers=2,
-            rnn_size=128,
-            rnn_bidirectional=False,
-            max_length=40,
-            dim_embeddings=100,
-            word_level=False
-        )
-
-        textgen.save("textgenrnn_weights_saved.hdf5")
+def main():
+    df = load_dataframe()
+    df = resample_dataframe(df)
+    df = expand_vocab_coverage(df)
+    df.to_csv("clean_tweets_rdt_kw_icet_am_ak.csv", index=False)
 
 
 
