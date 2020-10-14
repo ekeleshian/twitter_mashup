@@ -38,7 +38,6 @@ def download_model(args):
         print(f"Model {args.model_name}  already downloaded")
 
 
-
 if __name__ == '__main__':
     args = get_args()
     download_model(args)
@@ -66,26 +65,3 @@ if __name__ == '__main__':
                   optimizer=args.optimizer,
                   overwrite=args.overwrite,
                   restore_from=args.restore_from)
-
-
-#textgen method
-# from textgenrnn import textgenrnn
-
-# textgen = textgenrnn(name=f'annakhachiyan_Alyssa_Milano_twitter')
-#
-# textgen.train_new_model(
-#     texts,
-#     context_labels=context_labels,
-#     num_epochs=200,
-#     gen_epochs=1,
-#     batch_size=128,
-#     train_size=1.0,
-#     rnn_layers=2,
-#     rnn_size=128,
-#     rnn_bidirectional=False,
-#     max_length=40,
-#     dim_embeddings=100,
-#     word_level=False
-# )
-#
-# textgen.save("textgenrnn_weights_saved.hdf5")

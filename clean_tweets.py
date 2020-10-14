@@ -4,7 +4,6 @@ import re
 import demoji
 import pandas as pd
 import numpy as np
-from textgenrnn import textgenrnn
 
 
 def expand_vocab_coverage(df):
@@ -569,7 +568,7 @@ def expand_vocab_coverage(df):
 
 
 def get_text_vocab_coverage(df):
-    glove_embeddings = np.load('glove.840B.300d.pkl', allow_pickle=True)
+    glove_embeddings = np.load('models/glove.840B.300d.pkl', allow_pickle=True)
 
     def build_vocab(X):
         tweets = X.apply(lambda s: s.split()).values
@@ -674,7 +673,7 @@ def main():
     df = load_dataframe()
     df = resample_dataframe(df)
     df = expand_vocab_coverage(df)
-    df.to_csv("clean_tweets_rdt_kw_icet_am_ak.csv", index=False)
+    df.to_csv("data/clean_tweets_rdt_kw_icet_am_ak.csv", index=False)
 
 
 

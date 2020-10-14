@@ -89,6 +89,10 @@ def main():
             pickle.dump(all_tweets, file)
 
 
+        with open(f'{user}_lastid_v2.pkl', 'wb') as file:
+            pickle.dump(min_id, file)
+
+
 
 
 if __name__ == "__main__":
