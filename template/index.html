@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dropdown</title>
+</head>
+<body>
+<select name= names id="dropdown1">
+    {% for name in names %}
+    <option value= "{{name}}" SELECTED>{{name}}</option>"
+    {% endfor %}
+</select>
+<select name= names id="dropdown2">
+    {% for name in names %}
+    <option value= "{{name}}" SELECTED>{{name}}</option>"
+    {% endfor %}
+</select>
+<button id="submitBtn">Submit</button>
+</body>
+<script src="./static/index.js"></script>
+</html>
