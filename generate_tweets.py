@@ -1,6 +1,6 @@
 import gpt_2_simple as gpt2
 import argparse
-
+import time
 
 def get_args():
     parser = argparse.ArgumentParser(description='Generating snippets from trained data')
@@ -33,24 +33,63 @@ def get_args():
                         help='if the generated text should have prefixes')
     return parser.parse_args()
 
-
-if __name__ == '__main__':
-    args = get_args()
+def gen_tweets(args):
+    # args = get_args()
+    time_start = time.time()
     sess = gpt2.start_tf_sess()
-    gpt2.load_gpt2(sess, run_name=args.run_name)
+    gpt2.load_gpt2(sess, run_name=args['run_name'])
+    time_end = time.time()
+    print(f"total time to load gpt2: {time_end - time_start} seconds")
+    time_start_2 = time.time()
     results = gpt2.generate(sess,
-                            run_name=args.run_name,
-                            length=args.length,
-                            temperature=args.temperature,
-                            prefix=args.prefix,
-                            truncate=args.truncate,
-                            nsamples=args.nsamples,
-                            batch_size=args.batch_size,
-                            include_prefix=args.include_prefix,
-                            return_as_list=args.return_as_list,
-                            checkpoint_dir=args.checkpoint_dir,
-                            model_dir=args.models_dir,
-                            destination_path=args.destination_path,
-                            seed=args.seed,
-                            top_k=args.top_k,
-                            top_p=args.top_p)
+                            run_name=args["run_name"],
+                            length=args['length'],
+                            temperature=args['temperature'],
+                            prefix=args['prefix'],
+                            truncate=args['truncate'],
+                            nsamples=args['nsamples'],
+                            batch_size=args['batch_size'],
+                            include_prefix=args['include_prefix'],
+                            return_as_list=args['return_as_list'],
+                            checkpoint_dir=args['checkpoint_dir'],
+                            model_dir=args['models_dir'],
+                            destination_path=args['destination_path'],
+                            seed=args['seed'],
+                            top_k=args['top_k'],
+                            top_p=args['top_p'])
+    time_end_2 = time.time()
+    print(f"total time to generate tweet: {time_end_2 - time_start_2} seconds")
+
+    print("*******************************************")
+    print(results)
+    print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+#
+# if __name__ == '__main__':
+#     args = get_args()
+#     time_start = time.time()
+#     sess = gpt2.start_tf_sess()
+#     gpt2.load_gpt2(sess, run_name=args.run_name)
+#     time_end = time.time()
+#     print(f"total time to load gpt2: {time_end - time_start} seconds")
+#     time_start_2 = time.time()
+#     results = gpt2.generate(sess,
+#                             run_name=args.run_name,
+#                             length=args.length,
+#                             temperature=args.temperature,
+#                             prefix=args.prefix,
+#                             truncate=args.truncate,
+#                             nsamples=args.nsamples,
+#                             batch_size=args.batch_size,
+#                             include_prefix=args.include_prefix,
+#                             return_as_list=args.return_as_list,
+#                             checkpoint_dir=args.checkpoint_dir,
+#                             model_dir=args.models_dir,
+#                             destination_path=args.destination_path,
+#                             seed=args.seed,
+#                             top_k=args.top_k,
+#                             top_p=args.top_p)
+#     time_end_2 = time.time()
+#     print(f"total time to generate tweet: {time_end_2 - time_start_2} seconds")
+#
+#
+#     print(results)
