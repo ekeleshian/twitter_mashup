@@ -23,6 +23,10 @@ def expand_vocab_coverage(df):
         return contractions_re.sub(replace, text)
 
 
+    def remove_urls(text):
+        return re.sub(r"https?:\/\/t.co\/[A-Za-z0-9]+", "", text)
+
+
     def char_entity_references(text):
         text = re.sub(r"&gt;", ">", text)
         text = re.sub(r"&lt;", "<", text)
@@ -553,7 +557,9 @@ def expand_vocab_coverage(df):
         text = re.sub(r'TrumpKnew', "Trump Knew", text)
         return text
 
-    df['cleaner_tweet'] = df['tweet'].apply(contraction_expander)
+    df['cleaner_tweet'] = df['tweet'].apply(remove_urls)
+    df['cleaner_tweet'] = df['cleaner_tweet'].apply(contraction_expander)
+
     df['cleaner_tweet'] = df['cleaner_tweet'].apply(char_entity_references)
     df['cleaner_tweet'] = df['cleaner_tweet'].apply(replace_emojis)
     df['cleaner_tweet'] = df['cleaner_tweet'].apply(separate_punctuations)
@@ -619,37 +625,37 @@ def resample_dataframe(df):
 
 
 def load_dataframe():
-    with open("realDonaldTrump_tweets.pkl", 'rb') as file:
+    with open("data/realDonaldTrump_tweets.pkl", 'rb') as file:
         dt = pickle.load(file)
 
-    with open("Alyssa_Milano_tweets.pkl", 'rb') as file:
+    with open("data/Alyssa_Milano_tweets.pkl", 'rb') as file:
         am = pickle.load(file)
 
-    with open("kanyewest_tweets.pkl", 'rb') as file:
+    with open("data/kanyewest_tweets.pkl", 'rb') as file:
         ye = pickle.load(file)
 
-    with open("realDonaldTrump_tweets_2.pkl", 'rb') as file:
+    with open("data/realDonaldTrump_tweets_2.pkl", 'rb') as file:
         dt2 = pickle.load(file)
 
-    with open("kanyewest_tweets_2.pkl", 'rb') as file:
+    with open("data/kanyewest_tweets_2.pkl", 'rb') as file:
         ye2 = pickle.load(file)
 
-    with open("FINALLEVEL_tweets_2.pkl", 'rb') as file:
+    with open("data/FINALLEVEL_tweets_2.pkl", 'rb') as file:
         ice = pickle.load(file)
 
-    with open("realDonaldTrump_tweets_v2.pkl", 'rb') as file:
+    with open("data/realDonaldTrump_tweets_v2.pkl", 'rb') as file:
         dt3 = pickle.load(file)
 
-    with open("Alyssa_Milano_tweets_v2.pkl", "rb") as file:
+    with open("data/Alyssa_Milano_tweets_v2.pkl", "rb") as file:
         am3 = pickle.load(file)
 
-    with open("kanyewest_tweets_v2.pkl", 'rb') as file:
+    with open("data/kanyewest_tweets_v2.pkl", 'rb') as file:
         ye3 = pickle.load(file)
 
-    with open("annakhachiyan_tweets_v2.pkl", "rb") as file:
+    with open("data/annakhachiyan_tweets_v2.pkl", "rb") as file:
         ak = pickle.load(file)
 
-    with open("FINALLEVEL_tweets_v2.pkl", "rb") as file:
+    with open("data/FINALLEVEL_tweets_v2.pkl", "rb") as file:
         ice2 = pickle.load(file)
 
     rdt = list(set(dt + dt2 + dt3))
