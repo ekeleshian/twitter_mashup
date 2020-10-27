@@ -28,6 +28,11 @@ submitBtn.addEventListener("click", (event) => {
     }
   });
 
+  if (sortedUsers[0] === sortedUsers[1]) {
+    alert("must be different users.");
+    throw "error"
+  }
+
   fetch(`http://127.0.0.1:5000/submit/${sortedUsers[0]}/${sortedUsers[1]}`)
       .then(function (response) {
         return response.json();
