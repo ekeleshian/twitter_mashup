@@ -38,7 +38,7 @@ def f(user_one, user_two):
 
     mega_tweet_string = tweets[0]
     new_tweets = mega_tweet_string.split('<|endoftext|>')
-    new_tweets = [tweet[len('|<|startoftext|>') + 1:] for tweet in new_tweets]
+    new_tweets = [tweet[len('|<|startoftext|>'):] for tweet in new_tweets]
 
     with open(f'data/{users[0]}__{users[1]}__tweets__{users[2]}.pkl', 'wb') as file:
         more_tweets.extend(new_tweets)
