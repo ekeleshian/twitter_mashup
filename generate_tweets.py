@@ -1,6 +1,7 @@
 import gpt_2_simple as gpt2
 import argparse
 import time
+import pickle
 
 def get_args():
     parser = argparse.ArgumentParser(description='Generating snippets from trained data')
@@ -59,37 +60,40 @@ def gen_tweets(args):
                             top_p=args['top_p'])
     time_end_2 = time.time()
     print(f"total time to generate tweet: {time_end_2 - time_start_2} seconds")
-
-    print("*******************************************")
+    print("\n*******************************************\n")
     print(results)
-    print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+    return results
+
 #
-# if __name__ == '__main__':
-#     args = get_args()
-#     time_start = time.time()
-#     sess = gpt2.start_tf_sess()
-#     gpt2.load_gpt2(sess, run_name=args.run_name)
-#     time_end = time.time()
-#     print(f"total time to load gpt2: {time_end - time_start} seconds")
-#     time_start_2 = time.time()
-#     results = gpt2.generate(sess,
-#                             run_name=args.run_name,
-#                             length=args.length,
-#                             temperature=args.temperature,
-#                             prefix=args.prefix,
-#                             truncate=args.truncate,
-#                             nsamples=args.nsamples,
-#                             batch_size=args.batch_size,
-#                             include_prefix=args.include_prefix,
-#                             return_as_list=args.return_as_list,
-#                             checkpoint_dir=args.checkpoint_dir,
-#                             model_dir=args.models_dir,
-#                             destination_path=args.destination_path,
-#                             seed=args.seed,
-#                             top_k=args.top_k,
-#                             top_p=args.top_p)
-#     time_end_2 = time.time()
-#     print(f"total time to generate tweet: {time_end_2 - time_start_2} seconds")
-#
-#
-#     print(results)
+if __name__ == '__main__':
+    args = get_args()
+    time_start = time.time()
+    sess = gpt2.start_tf_sess()
+    gpt2.load_gpt2(sess, run_name=args.run_name)
+    time_end = time.time()
+    print(f"total time to load gpt2: {time_end - time_start} seconds")
+    time_start_2 = time.time()
+    results = gpt2.generate(sess,
+                            run_name=args.run_name,
+                            length=args.length,
+                            temperature=args.temperature,
+                            prefix=args.prefix,
+                            truncate=args.truncate,
+                            nsamples=args.nsamples,
+                            batch_size=args.batch_size,
+                            include_prefix=args.include_prefix,
+                            return_as_list=args.return_as_list,
+                            checkpoint_dir=args.checkpoint_dir,
+                            model_dir=args.models_dir,
+                            destination_path=args.destination_path,
+                            seed=args.seed,
+                            top_k=args.top_k,
+                            top_p=args.top_p)
+    time_end_2 = time.time()
+    print(f"total time to generate tweet: {time_end_2 - time_start_2} seconds")
+    users = args.run_name.split('__')
+
+    with open(f'data/{users[0]}__{users[1]}__tweets__{users[2]}.pkl', 'wb') as file:
+        pickle.dump(results, file)
+
+    print(results)

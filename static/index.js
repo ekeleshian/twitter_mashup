@@ -1,6 +1,7 @@
 const dropdownleft = document.getElementById("dropdown1");
 const dropdownright = document.getElementById("dropdown2");
 const submitBtn = document.getElementById('submitBtn');
+const generatedTweet = document.getElementById("generatedTweet");
 
 let leftUser;
 let rightUser;
@@ -32,7 +33,9 @@ submitBtn.addEventListener("click", (event) => {
         return response.json();
       })
       .then(function (data) {
-        console.log({data})
+        console.log({data});
+        generatedTweet.innerText = data;
+
       })
       .catch(function(e) {
     console.log({e})

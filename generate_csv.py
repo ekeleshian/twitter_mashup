@@ -8,7 +8,7 @@ def generate_csv(users):
     tweets.extend(list(df[df['user'] == users[1]]['cleaner_tweet']))
     df_part = pd.DataFrame({'tweet': tweets})
     df_part = df_part.sample(frac=1)
-    df_part.to_csv(f"data/{users[0]}_{users[1]}_tweets.csv", index=False, header=False)
+    df_part.to_csv(f"data/{users[0]}__{users[1]}__tweets.csv", index=False, header=False)
 
 
 if __name__ == '__main__':

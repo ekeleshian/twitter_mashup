@@ -1,5 +1,6 @@
 from multiprocessing import Process
 import os
+import pickle
 
 from generate_tweets import gen_tweets
 
@@ -27,9 +28,21 @@ def f(user_one, user_two):
     args['temperature'] = 1
     args['return_as_list'] = True
     args['model_name']= '124M'
-    args['run_name'] = f'{user_one}_{user_two}_v2'
+    args['run_name'] = f'{user_one}__{user_two}__v2'
+    users = args['run_name'].split('__')
 
-    gen_tweets(args)
+    with open(f'data/{users[0]}__{users[1]}__tweets__{users[2]}.pkl', 'rb') as file:
+        more_tweets = pickle.load(file)
+
+    tweets = gen_tweets(args)
+
+    mega_tweet_string = tweets[0]
+    new_tweets = mega_tweet_string.split('<|endoftext|>')
+    new_tweets = [tweet[len('|<|startoftext|>') + 1:] for tweet in new_tweets]
+
+    with open(f'data/{users[0]}__{users[1]}__tweets__{users[2]}.pkl', 'wb') as file:
+        more_tweets.extend(new_tweets)
+        pickle.dump(more_tweets, file)
 
     info("main_process")
 
